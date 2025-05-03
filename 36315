@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CGPA Calculator</title>
+  <style>
+    body {
+      font-family: "Times New Roman", Times, serif;
+      padding: 20px;
+      background-color: #d4fca3;
+    }
+    h2 {
+        text-align: center 
+    }
+    .semester {
+      margin-bottom: 30px;
+      padding: 15px;
+      background-color: #add8e6;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    .course {
+      margin-bottom: 10px;
+    }
+    input, select {
+      margin: 5px;
+      padding: 5px;
+    }
+    button {
+      background-color: #007BFF; /* blue */
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h2>CGPA Calculator</h2>
+
+<div id="semesters"></div>
+
+<button onclick="addSemester()">Add Semester</button>
+<button onclick="calculateTotalCGPA()">Calculate Total CGPA</button>
+
+<p id="totalResult"></p>
+
+<script>
+  const gradeValues = {
+    'A': 5,
+    'B': 4,
+    'C': 3,
+    'D': 2,
+    'E': 1,
+    'F': 0
+  };
+
+  let semesterCount = 0; // Counter for semester titles
+
+  function addSemester() {
+    semesterCount++; // Increase semester number
+
+    const semesterDiv = document.createElement('div');
+    semesterDiv.className = 'semester';
+
+    // Add semester heading
+    const heading = document.createElement('h3');
+    heading.innerText = `Semester ${semesterCount}`;
+    semesterDiv.appendChild(heading);
+
+    const courseList = document.createElement('div');
+    courseList.className = 'courseList';
+
+    semesterDiv.appendChild(courseList);
+    semesterDiv.appendChild(document.createElement('br'));
+
+    const addBtn = document.createElement('button');
+    addBtn.innerText = 'Add Course';
+    addBtn.onclick = () => addCourse(courseList);
+    semesterDiv.appendChild(addBtn);
+
+    const calcBtn = document.createElement('button');
+    calcBtn.innerText = 'Calculate CGPA';
+    calcBtn.onclick = () => calculateCGPA(semesterDiv, courseList);
+    semesterDiv.appendChild(calcBtn);
+
+    const resultP = document.createElement('p');
+    resultP.className = 'result';
+    semesterDiv.appendChild(resultP);
+
+    document.getElementById('semesters').appendChild(semesterDiv);
+
+    addCourse(courseList); // Add one course by default
+  }
+
+  function addCourse(courseList) {
+    const courseDiv = document.createElement('div');
+    courseDiv.className = 'course';
+
+    const nameInput = document.createElement('input');
+    nameInput.placeholder = 'Course Name';
+
+    const unitInput = document.createElement('input');
+    unitInput.type = 'number';
+    unitInput.placeholder = 'Credit Unit';
+
+    const gradeSelect = document.createElement('select');
+    ['A','B','C','D','E','F'].forEach(grade => {
+      const option = document.createElement('option');
+      option.value = grade;
+      option.innerText = grade;
+      gradeSelect.appendChild(option);
+    });
+
+    courseDiv.appendChild(nameInput);
+    courseDiv.appendChild(unitInput);
+    courseDiv.appendChild(gradeSelect);
+    courseList.appendChild(courseDiv);
+  }
+
+  function calculateCGPA(semesterDiv, courseList) {
+    const courses = courseList.getElementsByClassName('course');
+    let totalPoints = 0;
+    let totalUnits = 0;
+
+    for (let course of courses) {
+      const unit = parseFloat(course.children[1].value);
+      const grade = course.children[2].value;
+      if (!isNaN(unit) && grade in gradeValues) {
+        totalPoints += unit * gradeValues[grade];
+        totalUnits += unit;
+      }
+    }
+
+    const cgpa = (totalUnits > 0) ? (totalPoints / totalUnits).toFixed(2) : '0.00';
+    semesterDiv.querySelector('.result').innerText = 'CGPA: ' + cgpa;
+    semesterDiv.dataset.cgpa = cgpa;
+    semesterDiv.dataset.units = totalUnits;
+  }
+
+  function calculateTotalCGPA() {
+    const semesters = document.getElementsByClassName('semester');
+    let totalPoints = 0;
+    let totalUnits = 0;
+
+    for (let sem of semesters) {
+      const cgpa = parseFloat(sem.dataset.cgpa || 0);
+      const units = parseFloat(sem.dataset.units || 0);
+      totalPoints += cgpa * units;
+      totalUnits += units;
+    }
+
+    const totalCGPA = (totalUnits > 0) ? (totalPoints / totalUnits).toFixed(2) : '0.00';
+    document.getElementById('totalResult').innerText = 'Total CGPA: ' + totalCGPA;
+  }
+</script>
+
+<h3>vektech</h3>
+</body>
+</html>
