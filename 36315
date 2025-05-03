@@ -26,7 +26,7 @@
       padding: 5px;
     }
     button {
-      background-color: #007BFF; /* blue */
+      background-color: #007BFF;
       color: white;
       cursor: pointer;
     }
@@ -61,7 +61,7 @@
     const semesterDiv = document.createElement('div');
     semesterDiv.className = 'semester';
 
-    // Add semester heading
+    
     const heading = document.createElement('h3');
     heading.innerText = `Semester ${semesterCount}`;
     semesterDiv.appendChild(heading);
@@ -88,7 +88,7 @@
 
     document.getElementById('semesters').appendChild(semesterDiv);
 
-    addCourse(courseList); // Add one course by default
+    addCourse(courseList); 
   }
 
   function addCourse(courseList) {
