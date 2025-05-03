@@ -53,10 +53,10 @@
     'F': 0
   };
 
-  let semesterCount = 0; // Counter for semester titles
+  let semesterCount = 0;
 
   function addSemester() {
-    semesterCount++; // Increase semester number
+    semesterCount++;
 
     const semesterDiv = document.createElement('div');
     semesterDiv.className = 'semester';
